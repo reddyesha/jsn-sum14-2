@@ -1,32 +1,230 @@
 
 var cardReader = {
 
+	// Check for numbers
+	 checkCard: function(n) {
+	    if (typeof n === 'number') {
+	        if (n >= 0) {
+	            if (n < 52) {
+	                return true;
+	            }
+	        }
+	    } else {
+	        return false;
+	    }
+	},
+
+	// Check for rank
+	 checkRank: function(n) {
+	    if (typeof n === 'number') {
+	        if (n > 0) {
+	            if (n < 14) {
+	                return true;
+	            }
+	        }
+	    } else {
+	        return false;
+	    }
+	},
+
+	// Check suit
+	 checkSuit: function(n) {
+	    if (typeof n === 'number') {
+	        if (n > 0 && n < 5) {
+	            return true;
+	        }
+	    } else {
+	        return false;
+	    }
+	},
+
+	// Returns 1-13, representing the card's rank
 	rank: function(card) {
+
+		if (this.checkCard(card)) {
+	        if (card < 4) {
+	            return 1;
+	        } else if (card >= 4 && card <= 7) {
+	            return 2;
+	        } else if (card >= 8 && card <= 11) {
+	            return 3;
+	        } else if (card >= 12 && card <= 15) {
+	            return 4;
+	        } else if (card >= 16 && card <= 19) {
+	            return 5;
+	        } else if (card >= 20 && card <= 23) {
+	            return 6;
+	        } else if (card >= 24 && card <= 27) {
+	            return 7;
+	        } else if (card >= 28 && card <= 31) {
+	            return 8;
+	        } else if (card >= 32 && card <= 35) {
+	            return 9;
+	        } else if (card >= 36 && card <= 39) {
+	            return 10;
+	        } else if (card >= 40 && card <= 43) {
+	            return 11;
+	        } else if (card >= 44 && card <= 47) {
+	            return 12;
+	        } else if (card >= 48 && card <= 51) {
+	            return 13;
+	        }
+	    } else {
+	        return false;
+	    }
+
 	},
 
 	suit: function(card) {
+        
+        if (this.checkCard(card)) {
+            if (card % 4 === 0) {
+                return 1;
+            } else if (card % 4 === 1) {
+                return 2;
+            } else if (card % 4 === 2) {
+                return 3;
+            } else if (card % 4 === 3) {
+                return 4;
+            }
+        } else {
+            return false;
+        }
 	},
 
 	cardID: function(rank,suit) {
+        if (this.checkRank(rank) && this.checkSuit(suit)) {
+            return ((rank - 1) * 4) + (suit - 1);
+        } else {
+            return 'Invalid';
+        }
 	},
 
 	color: function(card) {
+        if (this.checkCard(card)) {
+            if (card % 4 === 0 || card % 4 === 1) {
+                return 'red';
+            } else if (card % 4 === 2 || card % 4 === 3) {
+                return 'black';
+            }
+        } else {
+            return false;
+        }
 	},
+    
+    stringifyRank: function(rank) {
+        if (rank === 1) {
+            return 'Ace of ';
+        } else if (rank === 2) {
+            return 'Two of ';
+        } else if (rank === 3) {
+            return 'Three of ';
+        } else if (rank === 4) {
+            return 'Four of ';
+        } else if (rank === 5) {
+            return 'Five of ';
+        } else if (rank === 6) {
+            return 'Six of ';
+        } else if (rank === 7) {
+            return 'Seven of ';
+        } else if (rank === 8) {
+            return 'Eight of ';
+        } else if (rank === 9) {
+            return 'Nine of ';
+        } else if (rank === 10) {
+            return 'Ten of ';
+        } else if (rank === 11) {
+            return 'Jack of ';
+        } else if (rank === 12) {
+            return 'Queen of ';
+        } else if (rank === 13) {
+            return 'King of ';
+        } else {
+            return false;
+        }
+    },
+    
+    stringifySuit: function(suit) {
+        if (suit === 1) {
+            return 'Hearts';
+        } else if (suit === 2) {
+            return 'Diamonds';
+        } else if (suit === 3) {
+            return 'Spades';
+        } else if (suit === 4) {
+            return 'Clubs';
+        } else {
+            return false;
+        }
+    },
 
 	//someExtraProperty: whatever...
 	name: function(card) {
+        if (this.checkCard(card)) {
+            return this.stringifyRank(this.rank(card)) + this.stringifySuit(this.suit(card));
+        }
 	},
 
 	precedes: function(cardA,cardB) {
+        if (this.checkCard(cardA) && this.checkCard(cardB)) {
+            if ((cardA === 51 && cardB === 0) || (this.rank(cardB) === 13 && this.rank(cardA) === 1)) {
+                return true;
+            } else if ((this.rank(cardB) - this.rank(cardA)) === 1) {
+                // test
+                console.log(this.rank(cardA), this.rank(cardB));
+                return true;
+            } else {
+                // test
+                console.log(this.rank(cardA), this.rank(cardB));
+                return false;
+            }
+        }
 	},
 
 	sameColor: function(cardA,cardB) {
+        if (this.checkCard(cardA) && this.checkCard(cardB)) {
+            if (this.color(cardA) === this.color(cardB)) {
+                return true;
+            } else if (this.color(cardA) !== this.color(cardB)) {
+                return false;
+            }
+        }
 	},
 
 	nextInSuit: function(cardA) {
+        if (this.checkCard(cardA)) {
+            if (cardA >= 0 && cardA < 48) {
+                return cardA + 4;
+            } else if (cardA === 48) {
+                return 0;
+            } else if (cardA === 49) {
+                return 1;
+            } else if (cardA === 50) {
+                return 2;
+            } else if (cardA === 51) {
+                return 3;
+            }
+        } else {
+            return 'Invalid input';
+        }
 	},
 
 	prevInSuit: function(cardB) {
+        if (this.checkCard(cardB)) {
+            if (cardB > 3) {
+                return cardB - 4;
+            } else if (cardB === 0) {
+                return 48;
+            } else if (cardB === 1) {
+                return 49;
+            } else if (cardB === 2) {
+                return 50;
+            } else if (cardB === 3) {
+                return 51;
+            }
+        } else {
+            return 'Invalid input';
+        }
 	}
 };
 
